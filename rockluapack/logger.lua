@@ -1,18 +1,16 @@
--- logger.lua
--- this is v1 now instead of protoype
-local logger = {}
+local logger = {
+	levels = {DEBUG = 1, INFO = 2, WARN = 3, ERROR = 4},
+	currentLevel = 2
+}
 
-logger._VERSION = "V1"
-logger._AUTHOR = "VB"
-logger._DESCRIPTION = "A logging module"
-
-logger.level = "info"
-logger.outputFile = "logs.txt"
-
-function logger.log(level, message)
-     local timestamp = os.date("%Y-%m-%d %H:%M:%S")
-	 local output = string.format("[%s] [%s] %s", timestamp, level, message)
-	 print(output)
+function Logger:log(level, message)
+	if self.levels[level] >= self.currentLevel then
+		local timestamp = os.date("%Y-%m-%d %H:%M:%S")
+		print(string.format("[%s] [%s] %s", timestamp, level, message))
+	end
 end
 
-return logger
+function Logger:debug(message) self:log("DEBUG", message) end
+function Logger:info(message) self:log("INFO", message) end
+function Logger:warn(message) self:log("WARN", message) end
+function Logger:error(message) self:log("ERROR", message) end
